@@ -165,7 +165,9 @@ if [ "${GIT_BRANCH}" == "detached" ]; then
 fi
 # Could have duplicates in dockerfile. Unique only
 for A in $(grep ^ARG ${dockerFile} | cut -d\  -f2 | cut -d= -f1 | sort -u); do
-  cmdArgs="${cmdArgs} --build-arg ${A}=${!A}"
+  if [ ! -z "${!A}" ]; then
+    cmdArgs="${cmdArgs} --build-arg ${A}=${!A}"
+  fi
 done
 echo "DEBUG: Args=${cmdArgs}"
 echo "${cmdArgs}" > ${dockerBuildArgs}
